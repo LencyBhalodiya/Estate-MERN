@@ -18,10 +18,12 @@ export const updateUser = async (req, res, next) => {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       {
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        avatar: req.body.avatar,
+        $set: {
+          username: req.body.username,
+          email: req.body.email,
+          password: req.body.password,
+          avatar: req.body.avatar,
+        },
       },
       { new: true }
     );
