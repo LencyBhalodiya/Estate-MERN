@@ -23,7 +23,7 @@ export default function Header() {
     }
   }, [location.search])
   return (
-    <header className="bg-slate-200 shadow-md">
+    <header className=" shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
         <Link to="/">
           <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
@@ -56,7 +56,7 @@ export default function Header() {
           </Link>
           <Link to="/profile">
             {currentUser ? (
-              <img src={currentUser.avatar} className="rounded-full h-7 w-7 object-cover" alt="profile" />
+              <img src={currentUser.avatar} className="rounded-full h-8 w-8 object-cover " alt="profile" />
             ) : (
               <li className="text-slate-700 hover:underline">Sign in</li>
             )}
