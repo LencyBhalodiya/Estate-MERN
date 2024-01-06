@@ -1,13 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import Home from "./pages/Home";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import About from "./pages/About";
+const SignIn = lazy(() => import("./pages/SignIn"));
+const SignUp = lazy(() => import("./pages/SignUp"));
+const About = lazy(() => import("./pages/About"));
+const UpdateListing = lazy(() => import("./pages/UpdateListing"));
+const CreateListing = lazy(() => import("./pages/CreateListing"));
 import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
-import CreateListing from "./pages/CreateListing";
-import UpdateListing from "./pages/UpdateListing";
 import Listing from "./pages/Listing";
 import Search from "./pages/Search";
 
@@ -17,15 +18,50 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/about" element={<About />} />
+        <Route
+          path="/sign-in"
+          element={
+            <Suspense fallback={<h1>Still Loading…</h1>}>
+              <SignIn />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/sign-up"
+          element={
+            <Suspense fallback={<h1>Still Loading…</h1>}>
+              <SignUp />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <Suspense fallback={<h1>Still Loading…</h1>}>
+              <About />
+            </Suspense>
+          }
+        />
         <Route path="/listing/:listingId" element={<Listing />} />
         <Route path="/search" element={<Search />} />
-        <Route element={<PrivateRoute />} >
+        <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
-          <Route path="/create-listing" element={<CreateListing />} />
-          <Route path="/update-listing/:listingId" element={<UpdateListing />} />
+          <Route
+            path="/create-listing"
+            element={
+              <Suspense fallback={<h1>Still Loading…</h1>}>
+                <CreateListing />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/update-listing/:listingId"
+            element={
+              <Suspense fallback={<h1>Still Loading…</h1>}>
+                <UpdateListing />
+              </Suspense>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>
@@ -33,3 +69,7 @@ function App() {
 }
 
 export default App;
+
+
+
+
