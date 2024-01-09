@@ -10,6 +10,7 @@ export default function Home() {
   const [offerListings, setOfferListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
+  const url = '../assets/images/blur.jpg'
   SwiperCore.use([Navigation]);
   useEffect(() => {
     const fetchOfferListings = async () => {
@@ -83,6 +84,13 @@ export default function Home() {
               ></div>
             </SwiperSlide>
           ))}
+
+        {
+          offerListings.length == 0 &&
+          <span className='skeleton-loader-gradient'></span>
+        }
+
+
       </Swiper>
 
       {/* listing results for offer, sale and rent */}
