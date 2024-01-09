@@ -15,6 +15,7 @@ import {
   FaShare,
 } from 'react-icons/fa';
 import Contact from '../components/Contact';
+import { ACTION_IDS } from '../components/actions/action.constants';
 
 
 export default function Listing() {
@@ -31,7 +32,7 @@ export default function Listing() {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/listing/get/${params.listingId}`);
+        const res = await fetch(`${ACTION_IDS.GET_LISTING_API + '/' + params.listingId}`);
         const data = await res.json();
         if (data.success === false) {
           setError(true);

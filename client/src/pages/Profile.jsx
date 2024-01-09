@@ -4,6 +4,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/
 import { app } from "../firebase";
 import { updateUserStart, updateUserFailure, updateUserSuccess, deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutUserStart } from "../redux/user/userSlice";
 import { Link } from 'react-router-dom'
+import { ACTION_IDS } from "../components/actions/action.constants";
 export default function Profile() {
 
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -64,7 +65,7 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+      const res = await fetch(`${ACTION_IDS.UPDATE_USER_API + currentUser._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -87,7 +88,7 @@ export default function Profile() {
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+      const res = await fetch(`${ACTION_IDS.DELETE_USER_API + currentUser._id}`, {
         method: 'DELETE',
       });
       const data = await res.json();
@@ -104,7 +105,7 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      const res = await fetch('/api/auth/signout');
+      const res = await fetch(ACTION_IDS.SIGNOUT_API);
       const data = await res.json();
 
       if (data.success === false) {
@@ -120,7 +121,7 @@ export default function Profile() {
   const handleShowListings = async () => {
     try {
       setShowListingsError(false);
-      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const res = await fetch(`${ACTION_IDS.UPDATE_USER_LISTINGS + currentUser._id}`);
       const data = await res.json();
       if (data.success === false) {
         setShowListingsError(true);
@@ -135,7 +136,7 @@ export default function Profile() {
 
   const handleListingDelete = async (listingId) => {
     try {
-      const res = await fetch(`/api/listing/delete/${listingId}`, {
+      const res = await fetch(`${ACTION_IDS.DELETE_LISTING_API + listingId}`, {
         method: 'DELETE',
       });
       const data = await res.json();

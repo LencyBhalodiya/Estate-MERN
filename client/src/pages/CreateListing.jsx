@@ -8,6 +8,7 @@ import { useState } from "react";
 import { app } from "../firebase";
 import { useSelector } from 'react-redux'
 import {useNavigate} from 'react-router-dom'
+import { ACTION_IDS } from "../components/actions/action.constants";
 
 export default function CreateListing() {
     const navigate = useNavigate();
@@ -122,7 +123,7 @@ export default function CreateListing() {
 
             setLoading(true)
             setError(false)
-            const res = await fetch('api/listing/create', {
+            const res = await fetch(ACTION_IDS.CREATE_LISTING, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

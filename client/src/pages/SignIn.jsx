@@ -7,6 +7,7 @@ import {
   signInSuccess,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import { ACTION_IDS } from "../components/actions/action.constants";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -25,7 +26,8 @@ export default function SignIn() {
     e.preventDefault();
     try {
       dispatch(signInStart());
-      const res = await fetch("/api/auth/signin", {
+      
+      const res = await fetch(ACTION_IDS.LOGIN_API, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -5,17 +5,18 @@ import { Navigation } from 'swiper/modules';
 import SwiperCore from 'swiper';
 import 'swiper/css/bundle';
 import ListingItem from '../components/ListingItem';
+import { ACTION_IDS } from '../components/actions/action.constants';
 
 export default function Home() {
   const [offerListings, setOfferListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
-  const url = '../assets/images/blur.jpg'
   SwiperCore.use([Navigation]);
   useEffect(() => {
     const fetchOfferListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?offer=true&limit=4');
+        const url = `${ACTION_IDS.GET_LISTING_API}?offer=true&limit=4`;
+        const res = await fetch(url);
         const data = await res.json();
         setOfferListings(data);
         fetchRentListings();
@@ -25,7 +26,8 @@ export default function Home() {
     };
     const fetchRentListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?type=rent&limit=4');
+        const url = `${ACTION_IDS.GET_LISTING_API}?type=rent&limit=4`;
+        const res = await fetch(url);
         const data = await res.json();
         setRentListings(data);
         fetchSaleListings();
@@ -36,7 +38,8 @@ export default function Home() {
 
     const fetchSaleListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?type=sale&limit=4');
+        const url = `${ACTION_IDS.GET_LISTING_API}?type=sale&limit=4`;
+        const res = await fetch(url);
         const data = await res.json();
         setSaleListings(data);
       } catch (error) {
