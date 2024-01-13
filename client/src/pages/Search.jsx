@@ -53,7 +53,7 @@ export default function Search() {
       setLoading(true);
       setShowMore(false);
       const searchQuery = urlParams.toString();
-      const res = await fetch(`${ACTION_IDS.GET_LISTING_API + '/' + searchQuery}`);
+      const res = await fetch(`${ACTION_IDS.GET_LISTING_API + '?' + searchQuery}`);
       const data = await res.json();
       if (data.length > 8) {
         setShowMore(true);
