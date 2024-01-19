@@ -5,6 +5,7 @@ import { app } from "../firebase";
 import { updateUserStart, updateUserFailure, updateUserSuccess, deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutUserStart } from "../redux/user/userSlice";
 import { Link } from 'react-router-dom'
 import { ACTION_IDS } from "../components/actions/action.constants";
+import api from "../components/util/fetchers.js"
 export default function Profile() {
 
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -65,14 +66,8 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`${ACTION_IDS.UPDATE_USER_API + currentUser._id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
-      const data = await res.json();
+
+      const { data } = await api.post(`${ACTION_IDS.UPDATE_USER_API + currentUser._id}`);
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
         return;
@@ -88,10 +83,8 @@ export default function Profile() {
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`${ACTION_IDS.DELETE_USER_API + currentUser._id}`, {
-        method: 'DELETE',
-      });
-      const data = await res.json();
+
+      const { data } = await api.delete(`${ACTION_IDS.DELETE_USER_API + currentUser._id}`);
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
         return;
@@ -105,8 +98,7 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      const res = await fetch(ACTION_IDS.SIGNOUT_API);
-      const data = await res.json();
+      const { data } = await api.get(ACTION_IDS.SIGNOUT_API);
 
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
@@ -121,8 +113,8 @@ export default function Profile() {
   const handleShowListings = async () => {
     try {
       setShowListingsError(false);
-      const res = await fetch(`${ACTION_IDS.UPDATE_USER_LISTINGS + currentUser._id}`);
-      const data = await res.json();
+      const { data } = await api.get(`${ACTION_IDS.UPDATE_USER_LISTINGS + currentUser._id}`);
+
       if (data.success === false) {
         setShowListingsError(true);
         return;
@@ -136,10 +128,7 @@ export default function Profile() {
 
   const handleListingDelete = async (listingId) => {
     try {
-      const res = await fetch(`${ACTION_IDS.DELETE_LISTING_API + listingId}`, {
-        method: 'DELETE',
-      });
-      const data = await res.json();
+      const { data } = await api.delete(`${ACTION_IDS.DELETE_LISTING_API + listingId}`);
       if (data.success === false) {
         console.log(data.message);
         return;

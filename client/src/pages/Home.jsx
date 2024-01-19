@@ -6,6 +6,7 @@ import SwiperCore from 'swiper';
 import 'swiper/css/bundle';
 import ListingItem from '../components/ListingItem';
 import { ACTION_IDS } from '../components/actions/action.constants';
+import api from "../components/util/fetchers.js"
 
 export default function Home() {
   const [offerListings, setOfferListings] = useState([]);
@@ -16,8 +17,7 @@ export default function Home() {
     const fetchOfferListings = async () => {
       try {
         const url = `${ACTION_IDS.GET_LISTING_API}?offer=true&limit=4`;
-        const res = await fetch(url);
-        const data = await res.json();
+        const { data } = await api.get(url);
         setOfferListings(data);
         fetchRentListings();
       } catch (error) {
@@ -27,8 +27,7 @@ export default function Home() {
     const fetchRentListings = async () => {
       try {
         const url = `${ACTION_IDS.GET_LISTING_API}?type=rent&limit=4`;
-        const res = await fetch(url);
-        const data = await res.json();
+        const { data } = await api.get(url);
         setRentListings(data);
         fetchSaleListings();
       } catch (error) {
@@ -39,8 +38,7 @@ export default function Home() {
     const fetchSaleListings = async () => {
       try {
         const url = `${ACTION_IDS.GET_LISTING_API}?type=sale&limit=4`;
-        const res = await fetch(url);
-        const data = await res.json();
+        const { data } = await api.get(url);
         setSaleListings(data);
       } catch (error) {
         log(error);

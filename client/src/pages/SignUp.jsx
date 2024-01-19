@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
 import { ACTION_IDS } from "../components/actions/action.constants";
+import api from "../components/util/fetchers.js"
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -19,14 +20,7 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const res = await fetch(ACTION_IDS.SIGNUP_API, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-    const data = await res.json();
+    const {data} = await api.post(ACTION_IDS.SIGNUP_API,formData)
     if (data.success === false) {
       setError(data.message);
       setLoading(false);
