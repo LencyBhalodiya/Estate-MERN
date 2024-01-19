@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ListingItem from '../components/ListingItem';
 import { ACTION_IDS } from '../components/actions/action.constants';
+import api from "../components/util/fetchers.js"
 
 export default function Search() {
   const navigate = useNavigate();
@@ -53,8 +54,7 @@ export default function Search() {
       setLoading(true);
       setShowMore(false);
       const searchQuery = urlParams.toString();
-      const res = await fetch(`${ACTION_IDS.GET_LISTING_API + '?' + searchQuery}`);
-      const data = await res.json();
+      const {data} = await api.get(`${ACTION_IDS.GET_LISTING_API + '?' + searchQuery}`)
       if (data.length > 8) {
         setShowMore(true);
       } else {

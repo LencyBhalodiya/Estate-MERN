@@ -9,6 +9,8 @@ import { app } from '../firebase';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ACTION_IDS } from '../components/actions/action.constants';
+import api from "../components/util/fetchers.js"
+
 
 export default function UpdateListing() {
   const { currentUser } = useSelector((state) => state.user);
@@ -38,8 +40,7 @@ export default function UpdateListing() {
     const fetchListing = async () => {
       const listingId = params.listingId;
       const url = ACTION_IDS.GET_LISTING_API + '/' + listingId;
-      const res = await fetch(url);
-      const data = await res.json();
+      const { data } = await api.get(url)
       if (data.success === false) {
         console.log(data.message);
         return;
@@ -150,18 +151,9 @@ export default function UpdateListing() {
         return setError('Discount price must be lower than regular price');
       setLoading(true);
       setError(false);
+      
       const url = ACTION_IDS.UPDATE_LISTING_API + params.listingId;
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          userRef: currentUser._id,
-        }),
-      });
-      const data = await res.json();
+      const {data} = await api.post(url,{...formData,userRef:currentUser._id});
       setLoading(false);
       if (data.success === false) {
         setError(data.message);
