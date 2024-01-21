@@ -8,8 +8,17 @@ const api = async (method, url, data) => {
             },
             body: data ? JSON.stringify(data) : undefined
         })
+        if(response.status == 403 || response.status == 401){
+            window.location.href = "./sign-in"
+            localStorage.removeItem('persist:root')
+            return {status: 'UnAuthorize',statusCode: response.status}
+        }
+        if(!response.ok)
+        return { status: 'failed', data: error.message, statusCode: error.statusCode }
+
         response = await response.json();
         return { status: 'success', data: response };
+        
     } catch (error) {
         return { status: 'failed', data: error.message, statusCode: error.statusCode }
     }
