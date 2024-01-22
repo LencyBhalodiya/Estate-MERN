@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ListingItem from '../components/ListingItem';
+import { ListingItem} from '../components'
 import { ACTION_IDS } from '../components/actions/action.constants';
 import api from "../components/util/fetchers.js"
 
