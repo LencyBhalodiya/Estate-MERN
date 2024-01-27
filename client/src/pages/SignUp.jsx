@@ -22,7 +22,7 @@ export default function SignUp() {
     e.preventDefault();
     setLoading(true);
     const {data} = await api.post(ACTION_IDS.SIGNUP_API,formData)
-    if (data.success === false) {
+    if (data?.success === false) {
       setError(data.message);
       setLoading(false);
       return;

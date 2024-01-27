@@ -26,7 +26,7 @@ export default function SignIn() {
 
       const { data } = await api.post(ACTION_IDS.LOGIN_API, formData)
 
-      if (data.success === false) {
+      if (data?.success === false) {
         dispatch(signInFailure(data.message));
         return;
       }

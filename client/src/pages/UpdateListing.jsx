@@ -41,7 +41,7 @@ export default function UpdateListing() {
       const listingId = params.listingId;
       const url = ACTION_IDS.GET_LISTING_API + '/' + listingId;
       const { data } = await api.get(url)
-      if (data.success === false) {
+      if (data?.success === false) {
         console.log(data.message);
         return;
       }
@@ -155,7 +155,7 @@ export default function UpdateListing() {
       const url = ACTION_IDS.UPDATE_LISTING_API + params.listingId;
       const {data} = await api.post(url,{...formData,userRef:currentUser._id});
       setLoading(false);
-      if (data.success === false) {
+      if (data?.success === false) {
         setError(data.message);
       }
       navigate(`/listing/${data._id}`);

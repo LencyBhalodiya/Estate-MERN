@@ -42,7 +42,6 @@ export default function Profile() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
           setFormData({ ...formData, avatar: downloadURL });
         });
       }
@@ -68,7 +67,7 @@ export default function Profile() {
       dispatch(updateUserStart());
 
       const { data } = await api.post(`${ACTION_IDS.UPDATE_USER_API + currentUser._id}`);
-      if (data.success === false) {
+      if (data?.success === false) {
         dispatch(updateUserFailure(data.message));
         return;
       }
@@ -85,7 +84,7 @@ export default function Profile() {
       dispatch(deleteUserStart());
 
       const { data } = await api.delete(`${ACTION_IDS.DELETE_USER_API + currentUser._id}`);
-      if (data.success === false) {
+      if (data?.success === false) {
         dispatch(deleteUserFailure(data.message));
         return;
       }
@@ -100,7 +99,7 @@ export default function Profile() {
       dispatch(signOutUserStart());
       const { data } = await api.get(ACTION_IDS.SIGNOUT_API);
 
-      if (data.success === false) {
+      if (data?.success === false) {
         dispatch(deleteUserFailure(data.message));
         return;
       }
@@ -115,7 +114,7 @@ export default function Profile() {
       setShowListingsError(false);
       const { data } = await api.get(`${ACTION_IDS.UPDATE_USER_LISTINGS + currentUser._id}`);
 
-      if (data.success === false) {
+      if (data?.success === false) {
         setShowListingsError(true);
         return;
       }
@@ -129,8 +128,7 @@ export default function Profile() {
   const handleListingDelete = async (listingId) => {
     try {
       const { data } = await api.delete(`${ACTION_IDS.DELETE_LISTING_API + listingId}`);
-      if (data.success === false) {
-        console.log(data.message);
+      if (data?.success === false) {
         return;
       }
 

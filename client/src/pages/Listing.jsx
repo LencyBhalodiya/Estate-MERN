@@ -35,7 +35,7 @@ export default function Listing() {
       try {
         setLoading(true);
         const {data} = await api.get(`${ACTION_IDS.GET_LISTING_API + '/' + params.listingId}`)
-        if (data.success === false) {
+        if (data?.success === false) {
           setError(true);
           setLoading(false);
           return;
