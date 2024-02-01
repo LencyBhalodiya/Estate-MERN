@@ -4,8 +4,8 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/
 import { app } from "../firebase";
 import { updateUserStart, updateUserFailure, updateUserSuccess, deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutUserStart } from "../redux/user/userSlice";
 import { Link } from 'react-router-dom'
-import { ACTION_IDS } from "../components/actions/action.constants";
-import api from "../components/util/fetchers.js"
+import { ACTION_IDS } from "@components/actions/action.constants";
+import api from "@components/util/fetchers.js"
 export default function Profile() {
 
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -212,7 +212,7 @@ export default function Profile() {
           {userListings.map((listing) => (
             <div
               key={listing._id}
-              className='border rounded-lg p-3 flex justify-between items-center gap-4'
+              className='border rounded-lg p-3 flex justify-between items-center gap-4 listing-wrapper'
             >
               <Link to={`/listing/${listing._id}`}>
                 <img

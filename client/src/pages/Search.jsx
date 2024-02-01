@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ListingItem} from '../components'
-import { ACTION_IDS } from '../components/actions/action.constants';
-import api from "../components/util/fetchers.js"
+import { ListingItem} from '@components'
+import { ACTION_IDS } from '@components/actions/action.constants';
+import api from "@components/util/fetchers.js"
 
 export default function Search() {
   const navigate = useNavigate();
@@ -88,7 +88,7 @@ export default function Search() {
       setSidebardata({
         ...sidebardata,
         [e.target.id]:
-          e.target.checked || e.target.checked === 'true' ? true : false,
+          !!(e.target.checked || e.target.checked === 'true'),
       });
     }
 

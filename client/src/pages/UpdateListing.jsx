@@ -8,8 +8,8 @@ import {
 import { app } from '../firebase';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ACTION_IDS } from '../components/actions/action.constants';
-import api from "../components/util/fetchers.js"
+import { ACTION_IDS } from '@components/actions/action.constants';
+import api from "@components/util/fetchers.js"
 
 
 export default function UpdateListing() {

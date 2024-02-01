@@ -4,9 +4,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import SwiperCore from 'swiper';
 import 'swiper/css/bundle';
-import { ListingItem } from '../components'
-import { ACTION_IDS } from '../components/actions/action.constants';
-import api from "../components/util/fetchers.js"
+import { ListingItem } from '@components'
+import { ACTION_IDS } from '@components/actions/action.constants';
+import api from "@components/util/fetchers.js"
 
 export default function Home() {
   const [offerListings, setOfferListings] = useState([]);

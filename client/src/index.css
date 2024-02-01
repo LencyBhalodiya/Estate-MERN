@@ -30,3 +30,7 @@ header {
         background-position: 468px 0;
     }
 }
+
+.listing-wrapper:hover{
+background-color: #fff;
+}

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import api from "../components/util/fetchers.js"
+import api from "@components/util/fetchers.js"
 import {signInStart,signInFailure,signInSuccess,} from "../redux/user/userSlice";
-import { OAuth } from '../components'
-import { ACTION_IDS } from "../components/actions/action.constants";
+import { OAuth } from '@components'
+import { ACTION_IDS } from "@components/actions/action.constants";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});

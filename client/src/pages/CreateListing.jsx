@@ -8,7 +8,7 @@ import { useState } from "react";
 import { app } from "../firebase";
 import { useSelector } from 'react-redux'
 import {useNavigate} from 'react-router-dom'
-import { ACTION_IDS } from "../components/actions/action.constants";
+import { ACTION_IDS } from "@components/actions/action.constants";
 
 export default function CreateListing() {
     const navigate = useNavigate();
