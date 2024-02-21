@@ -1,68 +1,67 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import api from "@components/util/fetchers.js"
-import {signInStart,signInFailure,signInSuccess,} from "../redux/user/userSlice";
+import { signInSuccess, } from "../redux/user/userSlice";
 import { OAuth } from '@components'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ACTION_IDS } from "@components/actions/action.constants";
+import { z } from "zod";
 
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+})
 export default function SignIn() {
-  const [formData, setFormData] = useState({});
-  const { loading, error } = useSelector((state) => state.user)
+  const { error } = useSelector((state) => state.user)
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
-  };
+  const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm({ resolver: zodResolver(schema) });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (formData) => {
     try {
-      dispatch(signInStart());
-
-      const { data } = await api.post(ACTION_IDS.LOGIN_API, formData)
-
-      if (data?.success === false) {
-        dispatch(signInFailure(data.message));
+      const { data, statusCode } = await api.post(ACTION_IDS.LOGIN_API, formData)
+      console.log(data);
+      if (statusCode !== 200) {
+        setError("root", { message: data || 'Invalid Credentials' })
         return;
       }
-
       dispatch(signInSuccess(data));
       navigate("/");
+
     } catch (error) {
-      dispatch(signInFailure(error.message));
+      setError("root", { message: 'Some Error Occurred' })
     }
-  };
+  }
 
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl text-center font-semibold my-7"> Sign Up</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <input
-          type="email"
+          {...register("email")}
+          type="name"
           placeholder="email"
           className="border p-3 rounded-lg"
-          onChange={handleChange}
-          id="email"
         />
+        {errors.email && (<div className="text-red-500">{errors.email.message}</div>)}
         <input
+          {...register("password")}
           type="password"
           placeholder="password"
           className="border p-3 rounded-lg"
-          onChange={handleChange}
-          id="password"
         />
+        {errors.password && (<div className="text-red-500">{errors.password.message}</div>)}
         <button
-          disabled={loading}
+          type="submit"
+          disabled={isSubmitting}
           className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disable:opacity-80"
         >
-          {loading ? "Loading..." : "Sign In"}
+          {isSubmitting ? "Loading..." : "Sign In"}
         </button>
         <OAuth />
+        {errors.root && (<div className="text-red-500">{errors.root.message}</div>)}
       </form>
       <div className="flex gap-2 mt-5">
         <p>Dont Have an account?</p>
