@@ -66,7 +66,7 @@ export default function Profile() {
     try {
       dispatch(updateUserStart());
 
-      const { data } = await api.post(`${ACTION_IDS.UPDATE_USER_API + currentUser._id}`);
+      const { data } = await api.post(`${ACTION_IDS.UPDATE_USER_API + currentUser._id}`,formData);
       if (data?.success === false) {
         dispatch(updateUserFailure(data.message));
         return;
