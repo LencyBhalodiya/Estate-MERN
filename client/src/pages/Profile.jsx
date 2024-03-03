@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from "../firebase";
 import { updateUserStart, updateUserFailure, updateUserSuccess, deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutUserStart } from "../redux/user/userSlice";
-import { Link } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 import { ACTION_IDS } from "@components/actions/action.constants";
 import api from "@components/util/fetchers.js"
 export default function Profile() {
@@ -18,6 +18,7 @@ export default function Profile() {
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (file) handleFileUpload(file);
@@ -66,9 +67,10 @@ export default function Profile() {
     try {
       dispatch(updateUserStart());
 
-      const { data } = await api.post(`${ACTION_IDS.UPDATE_USER_API + currentUser._id}`,formData);
-      if (data?.success === false) {
-        dispatch(updateUserFailure(data.message));
+      const { data, statusCode } = await api.post(`${ACTION_IDS.UPDATE_USER_API + currentUser._id}`,formData);
+      if (statusCode >= 400) {
+        dispatch(deleteUserSuccess(currentUser));
+        navigate('/sign-in')
         return;
       }
       dispatch(updateUserSuccess(data));
@@ -97,9 +99,9 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      const { data } = await api.get(ACTION_IDS.SIGNOUT_API);
+      const { data,statusCode } = await api.get(ACTION_IDS.SIGNOUT_API);
 
-      if (data?.success === false) {
+      if (statusCode >= 400) {
         dispatch(deleteUserFailure(data.message));
         return;
       }
@@ -112,10 +114,12 @@ export default function Profile() {
   const handleShowListings = async () => {
     try {
       setShowListingsError(false);
-      const { data } = await api.get(`${ACTION_IDS.UPDATE_USER_LISTINGS + currentUser._id}`);
+      const { data,statusCode } = await api.get(`${ACTION_IDS.UPDATE_USER_LISTINGS + currentUser._id}`);
 
-      if (data?.success === false) {
+      if (statusCode >= 400) {
         setShowListingsError(true);
+        dispatch(deleteUserSuccess(currentUser));
+        navigate('/sign-in')
         return;
       }
 
