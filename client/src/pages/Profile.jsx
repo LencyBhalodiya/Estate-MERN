@@ -3,9 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from "../firebase";
 import { updateUserStart, updateUserFailure, updateUserSuccess, deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutUserStart } from "../redux/user/userSlice";
-import { Link,useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ACTION_IDS } from "@components/actions/action.constants";
 import api from "@components/util/fetchers.js"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Profile() {
 
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -23,6 +26,8 @@ export default function Profile() {
   useEffect(() => {
     if (file) handleFileUpload(file);
   }, [file]);
+
+  const notify = () => toast("Wow so easy!");
 
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
@@ -62,20 +67,29 @@ export default function Profile() {
     setFormData({ ...formData, [e.target.id]: e.target.value })
   }
 
+  const errorSignOut = () => {
+    dispatch(deleteUserSuccess(currentUser));
+    toast.error("Session expired, please Re-login!", {
+      position: "bottom-right"
+    });
+    navigate('/sign-in')
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
 
-      const { data, statusCode } = await api.post(`${ACTION_IDS.UPDATE_USER_API + currentUser._id}`,formData);
+      const { data, statusCode } = await api.post(`${ACTION_IDS.UPDATE_USER_API + currentUser._id}`, formData);
       if (statusCode >= 400) {
-        dispatch(deleteUserSuccess(currentUser));
-        navigate('/sign-in')
+        errorSignOut()
         return;
       }
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
-
+      toast.success("INFO updated !", {
+        position: "bottom-right"
+      });
     } catch (error) {
       dispatch(updateUserFailure(error.message))
     }
@@ -99,7 +113,7 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      const { data,statusCode } = await api.get(ACTION_IDS.SIGNOUT_API);
+      const { data, statusCode } = await api.get(ACTION_IDS.SIGNOUT_API);
 
       if (statusCode >= 400) {
         dispatch(deleteUserFailure(data.message));
@@ -114,12 +128,11 @@ export default function Profile() {
   const handleShowListings = async () => {
     try {
       setShowListingsError(false);
-      const { data,statusCode } = await api.get(`${ACTION_IDS.UPDATE_USER_LISTINGS + currentUser._id}`);
+      const { data, statusCode } = await api.get(`${ACTION_IDS.UPDATE_USER_LISTINGS + currentUser._id}`);
 
       if (statusCode >= 400) {
         setShowListingsError(true);
-        dispatch(deleteUserSuccess(currentUser));
-        navigate('/sign-in')
+        errorSignOut()
         return;
       }
 
@@ -131,10 +144,16 @@ export default function Profile() {
 
   const handleListingDelete = async (listingId) => {
     try {
-      const { data } = await api.delete(`${ACTION_IDS.DELETE_LISTING_API + listingId}`);
-      if (data?.success === false) {
+      const { statusCode } = await api.delete(`${ACTION_IDS.DELETE_LISTING_API + listingId}`);
+
+      if (statusCode >= 400) {
+        setShowListingsError(true);
+        errorSignOut()
         return;
       }
+      toast.success("Deleted Successfully !", {
+        position: "bottom-right"
+      });
 
       setUserListings((prev) =>
         prev.filter((listing) => listing._id !== listingId)
@@ -201,7 +220,6 @@ export default function Profile() {
         <span onClick={handleSignOut} className="text-red-700 cursor-pointer">Sign Out</span>
       </div>
       <p className="text-red-700 mt-5"> {error || ''} </p>
-      <p className="text-green-700 mt-5"> {updateSuccess && 'User Updated successfully'} </p>
       <button onClick={handleShowListings} className='text-green-700 w-full'>
         Show Listings
       </button>
@@ -250,3 +268,4 @@ export default function Profile() {
     </div>
   );
 }
+

@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ACTION_IDS } from '@components/actions/action.constants';
 import api from "@components/util/fetchers.js"
+import { toast } from 'react-toastify';
 
 
 export default function UpdateListing() {
@@ -158,6 +159,9 @@ export default function UpdateListing() {
       if (data?.success === false) {
         setError(data.message);
       }
+      toast.success("Listing updated !", {
+        position: "bottom-right"
+      });
       navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);

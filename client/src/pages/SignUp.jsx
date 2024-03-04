@@ -5,6 +5,8 @@ import { OAuth } from '@components'
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { toast } from 'react-toastify';
+
 
 const schema = z.object({
   username: z.string().min(1),
@@ -23,6 +25,9 @@ export default function SignUp() {
         setError("root", { message:'Email already registered' })
         return;
       }
+      toast.success("User created Successfully, Please Login In !", {
+        position: "bottom-right"
+      });
       navigate("/sign-in"); 
     } catch (error) {
       setError("root", { message: 'Some Error Occurred' })
