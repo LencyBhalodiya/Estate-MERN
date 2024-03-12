@@ -8,13 +8,16 @@ const UpdateListing = lazy(() => import("@pages/UpdateListing"));
 const CreateListing = lazy(() => import("@pages/CreateListing"));
 import { Search, Listing, Profile } from "@pages"
 import { PrivateRoute, Header } from "@components"
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import i18n from "./i8n/i18n";
 
 function App() {
   return (
     <BrowserRouter>
-      <Header />
+    <Suspense fallback={<h1>Still Loading…</h1>}>
+    <Header />
+    </Suspense>
       <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />

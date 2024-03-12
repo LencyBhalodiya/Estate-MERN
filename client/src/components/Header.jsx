@@ -2,13 +2,22 @@ import { FaSearch } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next'
+
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation()
+
+  const detechLanguage = () => {
+    const language = window.navigator.language.split('-')[0];
+    i18n.changeLanguage(language);
+  }
 
   useEffect(() => {
+    detechLanguage()
     const timeoutId = setTimeout(() => {
       const urlParams = new URLSearchParams(window.location.search);
       urlParams.set('searchTerm', searchTerm);
@@ -16,7 +25,7 @@ export default function Header() {
       navigate(`/search?${searchQuery}`);
     }, 500);
     return () => clearTimeout(timeoutId);
-  }, [searchTerm])  
+  }, [searchTerm])
 
 
   return (
@@ -43,12 +52,13 @@ export default function Header() {
         <ul className="flex gap-4">
           <Link to="/">
             <li className="hidden sm:inline text-slate-700 hover:underline">
-              Home
+              {t('home')}
             </li>
           </Link>
           <Link to="/about">
             <li className="hidden sm:inline text-slate-700 hover:underline">
-              About
+              {t('about')}
+
             </li>
           </Link>
           <Link to="/profile">
