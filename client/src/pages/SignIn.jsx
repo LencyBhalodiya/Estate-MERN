@@ -22,7 +22,6 @@ export default function SignIn() {
   const onSubmit = async (formData) => {
     try {
       const { data, statusCode } = await api.post(ACTION_IDS.LOGIN_API, formData)
-      console.log(data);
       if (statusCode !== 200) {
         setError("root", { message: data || 'Invalid Credentials' })
         return;

@@ -6,7 +6,8 @@ import authRouter from './routes/auth.route.js'
 import listingRouter from './routes/listing.route.js'
 import cookieParser from 'cookie-parser'
 import path from 'path'
-dotenv.config();
+const d = dotenv.config();
+
 mongoose
   .connect(process.env.MONGO)
   .then(() => console.log("Connected to DB...."))
