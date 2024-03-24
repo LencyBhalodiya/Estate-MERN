@@ -1,12 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Home from "@pages/Home";
-const SignIn = lazy(() => import("@pages/SignIn"));
-const SignUp = lazy(() => import("@pages/SignUp"));
 const About = lazy(() => import("@pages/About"));
 const UpdateListing = lazy(() => import("@pages/UpdateListing"));
-const CreateListing = lazy(() => import("@pages/CreateListing"));
-import { Search, Listing, Profile } from "@pages"
+import { Search, Listing, Profile, CreateListing, SignIn, SignUp} from "@pages"
 import { PrivateRoute, Header } from "@components"
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
