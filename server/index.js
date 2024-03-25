@@ -5,6 +5,7 @@ import userRouter from './routes/user.route.js'
 import authRouter from './routes/auth.route.js'
 import listingRouter from './routes/listing.route.js'
 import cookieParser from 'cookie-parser'
+import limiter from './utils/rate-limiter.js'
 import path from 'path'
 const d = dotenv.config();
 
@@ -22,7 +23,8 @@ app.listen(8080, () => {
 });
 
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
+app.use(limiter);
 
 app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
